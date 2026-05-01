@@ -85,9 +85,14 @@ public class AdlsTokenCredentialProviders {
 
   static class DefaultTokenCredentialProvider implements AdlsTokenCredentialProvider {
 
+    // Built once: DefaultAzureCredential probes the full credential chain on construction
+    // and caches the selected credential internally after the first successful probe.
+    // Re-creating it on every credential() call wastes probe RTTs and defeats that cache.
+    private final TokenCredential credential = new DefaultAzureCredentialBuilder().build();
+
     @Override
     public TokenCredential credential() {
-      return new DefaultAzureCredentialBuilder().build();
+      return credential;
     }
 
     @Override

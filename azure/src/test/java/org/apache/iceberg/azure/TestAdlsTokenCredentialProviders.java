@@ -40,6 +40,18 @@ public class TestAdlsTokenCredentialProviders {
   }
 
   @Test
+  public void defaultFactoryReturnsSingletonInstance() {
+    assertThat(AdlsTokenCredentialProviders.defaultFactory())
+        .isSameAs(AdlsTokenCredentialProviders.defaultFactory());
+  }
+
+  @Test
+  public void defaultProviderReturnsSameCredentialInstance() {
+    AdlsTokenCredentialProvider provider = AdlsTokenCredentialProviders.defaultFactory();
+    assertThat(provider.credential()).isSameAs(provider.credential());
+  }
+
+  @Test
   public void emptyPropertiesWithNoProvider() {
     assertThat(AdlsTokenCredentialProviders.from(ImmutableMap.of()))
         .isNotNull()
